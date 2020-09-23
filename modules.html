@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dependencies" href="dependencies.html" />
     <link rel="prev" title="Installation" href="installing.html" /> 
 
   
@@ -77,7 +78,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">ODToolkit Documentation</span></p>
+              <p class="caption"><span class="caption-text">COBS Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Readme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
@@ -87,6 +88,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-eventqueue">eventqueue module</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption"><span class="caption-text">Credits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
 </ul>
 
             
@@ -172,121 +177,254 @@
 <dl class="method">
 <dt id="model.Model.add_configuration">
 <code class="descname">add_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>values: dict = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.add_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.add_configuration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create and add a new component into the building model with the specific type and setting values.
-:param idf_header_name: The type of the component.
-:param values: A dictionary map the setting entry and the setting value.
-:return: The new component.</p>
+<dd><p>Create and add a new component into the building model with the specific type and setting values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>idf_header_name</strong> – The type of the component.</li>
+<li><strong>values</strong> – A dictionary map the setting entry and the setting value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new component.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.add_state_values">
 <code class="descname">add_state_values</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.add_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.add_state_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add entries to the state. If selected entry is not available for the current building, it will be ignored.
-:param entry: Entry names that the state of the environment should have.
-:return: None.</p>
+<dd><p>Add entries to the state. If selected entry is not available for the current building, it will be ignored.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>entry</strong> – Entry names that the state of the environment should have.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.delete_configuration">
 <code class="descname">delete_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>component_name: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.delete_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.delete_configuration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete an existing component from the building model.
-:param idf_header_name: The type of the component.
-:param component_name: The entry of the component.
-:return: None.</p>
+<dd><p>Delete an existing component from the building model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>idf_header_name</strong> – The type of the component.</li>
+<li><strong>component_name</strong> – The entry of the component.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.edit_configuration">
 <code class="descname">edit_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>identifier: dict</em>, <em>update_values: dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.edit_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.edit_configuration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Edit an existing component in the building model.
-:param idf_header_name: The type of the component.
-:param identifier: A dictionary map the setting entry and the setting value to locate the target component.
-:param update_values: A dictionary map the setting entry and the setting value that needs to update.
-:return: None.</p>
+<dd><p>Edit an existing component in the building model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>idf_header_name</strong> – The type of the component.</li>
+<li><strong>identifier</strong> – A dictionary map the setting entry and the setting value to locate the target component.</li>
+<li><strong>update_values</strong> – A dictionary map the setting entry and the setting value that needs to update.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_all_configurations">
 <code class="descname">get_all_configurations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_all_configurations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_all_configurations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the IDF file, and return the content formatted with the IDD file.
-:return: the full IDF file with names and comments aside.</p>
+<dd><p>Read the IDF file, and return the content formatted with the IDD file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the full IDF file with names and comments aside.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_available_names_under_group">
 <code class="descname">get_available_names_under_group</code><span class="sig-paren">(</span><em>idf_header_name: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_available_names_under_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_available_names_under_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given the type of components, find all available components in the building by their entry.
-:param idf_header_name: The type of the component.
-:return: List of names.</p>
+<dd><p>Given the type of components, find all available components in the building by their entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idf_header_name</strong> – The type of the component.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of names.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_configuration">
 <code class="descname">get_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>component_name: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_configuration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given the type of component, the entry of the target component, find the settings of that component.
-:param idf_header_name: The type of the component.
-:param component_name: The entry of the component.
-:return: Settings of this component.</p>
+<dd><p>Given the type of component, the entry of the target component, find the settings of that component.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>idf_header_name</strong> – The type of the component.</li>
+<li><strong>component_name</strong> – The entry of the component.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Settings of this component.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_current_state_values">
 <code class="descname">get_current_state_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_current_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_current_state_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the current entries in the state.
-:return: List of entry names that is currently available in the state.</p>
+<dd><p>Find the current entries in the state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of entry names that is currently available in the state.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_link_zones">
 <code class="descname">get_link_zones</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_link_zones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_link_zones" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a graph that shows the connectivity of zones of the current building.
-:return: A bi-directional graph represented by a dictionary where the key is the source zone name and the value is a set of all neighbor zone name.</p>
+<dd><p>Generate a graph that shows the connectivity of zones of the current building.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A bi-directional graph represented by a dictionary where the key is the source zone name and the value is a set of all neighbor zone name.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_possible_actions">
 <code class="descname">get_possible_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_possible_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_possible_actions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all available actions that the user-defined agent can take. This list of actions only depends on the building architecture.
-:return: List of available actions in dictionaries.</p>
+<dd><p>Get all available actions that the user-defined agent can take. This list of actions only depends on the building architecture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of available actions in dictionaries.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_possible_state_entries">
 <code class="descname">get_possible_state_entries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_possible_state_entries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_possible_state_entries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all available state entries. This list of entries only depends on the building architecture.
-:return: List of available state entry names.</p>
+<dd><p>Get all available state entries. This list of entries only depends on the building architecture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of available state entry names.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_sub_configuration">
 <code class="descname">get_sub_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_sub_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_sub_configuration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show all available settings for the given type of component.
-:param idf_header_name: The type of the component.
-:return: List of settings entry.</p>
+<dd><p>Show all available settings for the given type of component.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idf_header_name</strong> – The type of the component.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of settings entry.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.get_value_range">
 <code class="descname">get_value_range</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>field_name: str</em>, <em>validate: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_value_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_value_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the range of acceptable values of the specific setting.
-:param idf_header_name: The type of the component.
-:param field_name: The setting entry.
-:param validate: Set to True to check the current value is valid or not.
-:return: Validation result or the range of all acceptable values retrieved from the IDD file.</p>
+<dd><p>Get the range of acceptable values of the specific setting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>idf_header_name</strong> – The type of the component.</li>
+<li><strong>field_name</strong> – The setting entry.</li>
+<li><strong>validate</strong> – Set to True to check the current value is valid or not.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Validation result or the range of all acceptable values retrieved from the IDD file.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.is_terminate">
 <code class="descname">is_terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.is_terminate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.is_terminate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine if the simulation is finished or not.
-:return: True if the simulation is done, and False otherwise.</p>
+<dd><p>Determine if the simulation is finished or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the simulation is done, and False otherwise.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.list_all_available_configurations">
 <code class="descname">list_all_available_configurations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.list_all_available_configurations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.list_all_available_configurations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a list of all type of components appeared in the current building.
-:return: list of components entry.</p>
+<dd><p>Generate a list of all type of components appeared in the current building.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of components entry.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -297,73 +435,148 @@
 <dl class="staticmethod">
 <dt id="model.Model.name_reformat">
 <em class="property">static </em><code class="descname">name_reformat</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.name_reformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.name_reformat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert the entry from the space separated entry to the underline separated entry to match the IDF.
-:param name: The space separated entry.
-:return: The underline separated entry.</p>
+<dd><p>Convert the entry from the space separated entry to the underline separated entry to match the IDF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – The space separated entry.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The underline separated entry.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.pop_state_values">
 <code class="descname">pop_state_values</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.pop_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.pop_state_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove entries from the state by its index. If selected index is not available in the state, it will be ignored.
-:param index: Entry index that the state of the environment should not have.
-:return: All entry names that is removed.</p>
+<dd><p>Remove entries from the state by its index. If selected index is not available in the state, it will be ignored.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> – Entry index that the state of the environment should not have.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">All entry names that is removed.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.remove_state_values">
 <code class="descname">remove_state_values</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.remove_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.remove_state_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove entries from the state. If selected entry is not available in the state, it will be ignored.
-:param entry: Entry names that the state of the environment should not have.
-:return: None.</p>
+<dd><p>Remove entries from the state. If selected entry is not available in the state, it will be ignored.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>entry</strong> – Entry names that the state of the environment should not have.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.reset">
 <code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clear the actions and buffer, reset the environment and start the simulation.
-:return: The initial state of the simulation.</p>
+<dd><p>Clear the actions and buffer, reset the environment and start the simulation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The initial state of the simulation.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.save_idf_file">
 <code class="descname">save_idf_file</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.save_idf_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.save_idf_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the modified building model for EnergyPlus simulation
-:param path: The relative path to the modified IDF file.
-:return: None.</p>
+<dd><p>Save the modified building model for EnergyPlus simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> – The relative path to the modified IDF file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.select_state_values">
 <code class="descname">select_state_values</code><span class="sig-paren">(</span><em>entry=None</em>, <em>index=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.select_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.select_state_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select interested state entries. If selected entry is not available for the current building, it will be ignored.
-:param entry: Entry names that the state of the environment should have.
-:param index: Index of all available entries that the state of the environment should have.
-:return: None.</p>
+<dd><p>Select interested state entries. If selected entry is not available for the current building, it will be ignored.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>entry</strong> – Entry names that the state of the environment should have.</li>
+<li><strong>index</strong> – Index of all available entries that the state of the environment should have.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="model.Model.set_energyplus_folder">
 <em class="property">classmethod </em><code class="descname">set_energyplus_folder</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.set_energyplus_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.set_energyplus_folder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the pyenergyplus into the path so the program can find the EnergyPlus.
-:param path: The installation path of the EnergyPlus 9.3.0.
-:return: None.</p>
+<dd><p>Add the pyenergyplus into the path so the program can find the EnergyPlus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#str" title="(in Python v3.5)"><em>str</em></a>) – The installation path of the EnergyPlus 9.3.0.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.simulate">
 <code class="descname">simulate</code><span class="sig-paren">(</span><em>terminate_after_warmup=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.simulate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run the whole simulation once. If user use this method instead of the reset function, the user need to provide the Agent.
-:param terminate_after_warmup: True if the simulation should terminate after the warmup.
-:return: None.</p>
+<dd><p>Run the whole simulation once. If user use this method instead of the reset function, the user need to provide the Agent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>terminate_after_warmup</strong> – True if the simulation should terminate after the warmup.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.Model.step">
 <code class="descname">step</code><span class="sig-paren">(</span><em>action_list: list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add all actions into the <a href="#id1"><span class="problematic" id="id2">`</span></a>EventQueue’, and then generate the state value of the next timestep.
-:param action_list: list of dictionarys contains the arguments for <a href="#id3"><span class="problematic" id="id4">`</span></a>EventQueue.schedule_event()’.
-:return: The state value of the current timestep.</p>
+<dd><p>Add all actions into the <code class="docutils literal notranslate"><span class="pre">EventQueue</span></code>, and then generate the state value of the next timestep.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action_list</strong> – list of dictionarys contains the arguments for <code class="docutils literal notranslate"><span class="pre">EventQueue.schedule_event()</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The state value of the current timestep.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -380,16 +593,31 @@ TODO: Add occupancy actions</p>
 <dl class="method">
 <dt id="occupancy_generator.OccupancyGenerator.generate_all_people_daily_movement">
 <code class="descname">generate_all_people_daily_movement</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#OccupancyGenerator.generate_all_people_daily_movement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.OccupancyGenerator.generate_all_people_daily_movement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a list of <a href="#id5"><span class="problematic" id="id6">`</span></a>Person’ objects and simulate the movement for each person.
-:return: list of <a href="#id7"><span class="problematic" id="id8">`</span></a>Person’ objects.</p>
+<dd><p>Generate a list of <code class="docutils literal notranslate"><span class="pre">Person</span></code> objects and simulate the movement for each person.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of <code class="docutils literal notranslate"><span class="pre">Person</span></code> objects.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="occupancy_generator.OccupancyGenerator.generate_daily_schedule">
 <code class="descname">generate_daily_schedule</code><span class="sig-paren">(</span><em>add_to_model=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#OccupancyGenerator.generate_daily_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.OccupancyGenerator.generate_daily_schedule" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a numpy matrix contains the locations of all occupants in the day and add tp the model.
-:param add_to_model: Default is True. If False, then only generate the schedule in numpy and IDF format but not save to the model automatically.
-:return: Three objects, (IDF format schedule, numpy format schedule, list of all accessble locations in the building).</p>
+<dd><p>Generate a numpy matrix contains the locations of all occupants in the day and add tp the model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>add_to_model</strong> – Default is True. If False, then only generate the schedule in numpy and IDF format but not save to the model automatically.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Three objects, (IDF format schedule, numpy format schedule, list of all accessble locations in the building).</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -423,20 +651,44 @@ TODO: Add occupancy actions</p>
 <dl class="method">
 <dt id="occupancy_generator.Person.check_in_office">
 <code class="descname">check_in_office</code><span class="sig-paren">(</span><em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.check_in_office"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.check_in_office" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine if the occupant is in his/her office or not during a given period of time.
-:param start: The start time.
-:param end: The end time.
-:return: Return True if the occupant is in his/her office between given time, and False otherwise.</p>
+<dd><p>Determine if the occupant is in his/her office or not during a given period of time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> – The start time.</li>
+<li><strong>end</strong> – The end time.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Return True if the occupant is in his/her office between given time, and False otherwise.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="occupancy_generator.Person.customer_come">
 <code class="descname">customer_come</code><span class="sig-paren">(</span><em>start_time</em>, <em>end_time</em>, <em>dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.customer_come"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.customer_come" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simulate the event of customers coming for the current occupant.
-:param start_time: The scheduled appointment start time (not the real start time).
-:param end_time: The scheduled appointment end time (not the real end time).
-:param dest: The appointment location (zone entry).
-:return: None</p>
+<dd><p>Simulate the event of customers coming for the current occupant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_time</strong> – The scheduled appointment start time (not the real start time).</li>
+<li><strong>end_time</strong> – The scheduled appointment end time (not the real end time).</li>
+<li><strong>dest</strong> – The appointment location (zone entry).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -446,37 +698,73 @@ TODO: Add occupancy actions</p>
 they leave. Each person target to come at 8:30 am and leave at 5 pm, with a exponential distribution where
 mu = 30 minute. Use exponential distribution because people tend to come/leave on time with a very small
 chance of being late. In the meantime, assume that people directly goes into their own office right away.
-They require some time to walk to their office.
-:return: True if come to work, False otherwise</p>
+They require some time to walk to their office.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if come to work, False otherwise</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="occupancy_generator.Person.generate_daily_meeting">
 <code class="descname">generate_daily_meeting</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_daily_meeting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_daily_meeting" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate the time that current occupant go to the daily meeting.
-:return: None</p>
+<dd><p>Generate the time that current occupant go to the daily meeting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="occupancy_generator.Person.generate_daily_route">
 <code class="descname">generate_daily_route</code><span class="sig-paren">(</span><em>customer_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_daily_route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_daily_route" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate the whole day locations for the occupant.
-:param customer_list: List of Person that will visit the occupant today.
-:return: List of appointment times.</p>
+<dd><p>Generate the whole day locations for the occupant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>customer_list</strong> – List of Person that will visit the occupant today.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of appointment times.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="occupancy_generator.Person.generate_go_other_office">
 <code class="descname">generate_go_other_office</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_go_other_office"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_go_other_office" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate the event of visiting colleagues’ office for random talk. Only possible if the colleague is in the office.
-:return: None.</p>
+<dd><p>Generate the event of visiting colleagues’ office for random talk. Only possible if the colleague is in the office.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="occupancy_generator.Person.generate_lunch">
 <code class="descname">generate_lunch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_lunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_lunch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate the time that current occupant go to the cafeteria and take the lunch.
-:return: None</p>
+<dd><p>Generate the time that current occupant go to the cafeteria and take the lunch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -489,9 +777,17 @@ They require some time to walk to their office.
 <dl class="method">
 <dt id="occupancy_generator.Person.get_position">
 <code class="descname">get_position</code><span class="sig-paren">(</span><em>sec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.get_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.get_position" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the location of the occupant at the given time
-:param sec: The time that need to check.
-:return: The zone entry of the location at the given time.</p>
+<dd><p>Get the location of the occupant at the given time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sec</strong> – The time that need to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The zone entry of the location at the given time.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -502,9 +798,17 @@ They require some time to walk to their office.
 <dl class="method">
 <dt id="occupancy_generator.Person.handle_customer">
 <code class="descname">handle_customer</code><span class="sig-paren">(</span><em>num_customer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.handle_customer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.handle_customer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set up an appointment for occupant with some new customers.
-:param num_customer: Number of customers in total today will come.
-:return: tuple of (appointment start time, appointment end time, appointment location).</p>
+<dd><p>Set up an appointment for occupant with some new customers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num_customer</strong> – Number of customers in total today will come.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of (appointment start time, appointment end time, appointment location).</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -512,9 +816,17 @@ They require some time to walk to their office.
 <dl class="function">
 <dt id="occupancy_generator.get_white_bias">
 <code class="descclassname">occupancy_generator.</code><code class="descname">get_white_bias</code><span class="sig-paren">(</span><em>second</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#get_white_bias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.get_white_bias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a bias.
-:param second: Value range.
-:return: Bias.</p>
+<dd><p>Generate a bias.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>second</strong> – Value range.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Bias.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -561,6 +873,8 @@ They require some time to walk to their office.
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dependencies.html" class="btn btn-neutral float-right" title="Dependencies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="installing.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

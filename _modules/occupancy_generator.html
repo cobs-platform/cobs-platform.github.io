@@ -172,8 +172,9 @@
 <span class="sd">        Customer service time: average 30 minutes each.</span>
 <span class="sd">        Average number of guests per day: 3.</span>
 <span class="sd">        </span>
-<span class="sd">        :param model: The `COBS.Model&#39; class object as the target building model.</span>
-<span class="sd">        :param num_occupant: The number of long-term occupants belongs to the model.</span>
+<span class="sd">        :parameter model: The ``COBS.Model`` class object as the target building model.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter num_occupant: The number of long-term occupants belongs to the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_work</span> <span class="o">=</span> <span class="mi">9</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Work start from 9:00. unit: second</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_work</span> <span class="o">=</span> <span class="mi">17</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Work end at 17:00. unit: second</span>
@@ -220,8 +221,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Use BFS to find the shortest path between two zones.</span>
 
-<span class="sd">        :param start: The entry of the start zone.</span>
-<span class="sd">        :param end: The entry of the target zone.</span>
+<span class="sd">        :parameter start: The entry of the start zone.</span>
+
+<span class="sd">        :parameter end: The entry of the target zone.</span>
+
 <span class="sd">        :return: A list of zone names that the occupant need to cross.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">queue</span> <span class="o">=</span> <span class="p">[(</span><span class="n">start</span><span class="p">,</span> <span class="p">[</span><span class="n">start</span><span class="p">])]</span>
@@ -241,8 +244,9 @@
 
 <div class="viewcode-block" id="OccupancyGenerator.generate_all_people_daily_movement"><a class="viewcode-back" href="../modules.html#occupancy_generator.OccupancyGenerator.generate_all_people_daily_movement">[docs]</a>    <span class="k">def</span> <span class="nf">generate_all_people_daily_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generate a list of `Person&#39; objects and simulate the movement for each person.</span>
-<span class="sd">        :return: list of `Person&#39; objects.</span>
+<span class="sd">        Generate a list of ``Person`` objects and simulate the movement for each person.</span>
+<span class="sd">        </span>
+<span class="sd">        :return: list of ``Person`` objects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">available_worker</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_assign</span><span class="p">):</span>
@@ -273,7 +277,9 @@
 <div class="viewcode-block" id="OccupancyGenerator.generate_daily_schedule"><a class="viewcode-back" href="../modules.html#occupancy_generator.OccupancyGenerator.generate_daily_schedule">[docs]</a>    <span class="k">def</span> <span class="nf">generate_daily_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">add_to_model</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a numpy matrix contains the locations of all occupants in the day and add tp the model.</span>
-<span class="sd">        :param add_to_model: Default is True. If False, then only generate the schedule in numpy and IDF format but not save to the model automatically.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter add_to_model: Default is True. If False, then only generate the schedule in numpy and IDF format but not save to the model automatically.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: Three objects, (IDF format schedule, numpy format schedule, list of all accessble locations in the building).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">all_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="s2">&quot;Zone&quot;</span><span class="p">)</span>
@@ -380,8 +386,10 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">office</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Each long-term occupant will have an office, and he tend to stay in office more than other places.</span>
-<span class="sd">        :param generator: The OccupancyGenerator which provides the settings.</span>
-<span class="sd">        :param office: The designated office for long-term occupants.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter generator: The OccupancyGenerator which provides the settings.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter office: The designated office for long-term occupants.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">office</span> <span class="o">=</span> <span class="n">office</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">day_cut_off</span><span class="p">)</span>
@@ -390,9 +398,13 @@
 <div class="viewcode-block" id="Person.customer_come"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.customer_come">[docs]</a>    <span class="k">def</span> <span class="nf">customer_come</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Simulate the event of customers coming for the current occupant.</span>
-<span class="sd">        :param start_time: The scheduled appointment start time (not the real start time).</span>
-<span class="sd">        :param end_time: The scheduled appointment end time (not the real end time).</span>
-<span class="sd">        :param dest: The appointment location (zone entry).</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter start_time: The scheduled appointment start time (not the real start time).</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter end_time: The scheduled appointment end time (not the real end time).</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter dest: The appointment location (zone entry).</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pass_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">entry_zone</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
@@ -424,6 +436,7 @@
 <span class="sd">        mu = 30 minute. Use exponential distribution because people tend to come/leave on time with a very small</span>
 <span class="sd">        chance of being late. In the meantime, assume that people directly goes into their own office right away.</span>
 <span class="sd">        They require some time to walk to their office.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: True if come to work, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">day_cut_off</span><span class="p">)</span>
@@ -467,6 +480,7 @@
 <div class="viewcode-block" id="Person.generate_lunch"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_lunch">[docs]</a>    <span class="k">def</span> <span class="nf">generate_lunch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate the time that current occupant go to the cafeteria and take the lunch.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Usually go for lunch immediately, with average delay of 5 minute</span>
@@ -499,6 +513,7 @@
 <div class="viewcode-block" id="Person.generate_daily_meeting"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_daily_meeting">[docs]</a>    <span class="k">def</span> <span class="nf">generate_daily_meeting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate the time that current occupant go to the daily meeting.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Arrive maximum 3 min early, 2 min late</span>
@@ -531,8 +546,11 @@
 <div class="viewcode-block" id="Person.check_in_office"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.check_in_office">[docs]</a>    <span class="k">def</span> <span class="nf">check_in_office</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if the occupant is in his/her office or not during a given period of time.</span>
-<span class="sd">        :param start: The start time.</span>
-<span class="sd">        :param end: The end time.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter start: The start time.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter end: The end time.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: Return True if the occupant is in his/her office between given time, and False otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">office</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span></div>
@@ -554,7 +572,9 @@
 <div class="viewcode-block" id="Person.handle_customer"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.handle_customer">[docs]</a>    <span class="k">def</span> <span class="nf">handle_customer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_customer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set up an appointment for occupant with some new customers.</span>
-<span class="sd">        :param num_customer: Number of customers in total today will come.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter num_customer: Number of customers in total today will come.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: tuple of (appointment start time, appointment end time, appointment location).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Set-up meeting time</span>
@@ -586,6 +606,7 @@
 <div class="viewcode-block" id="Person.generate_go_other_office"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_go_other_office">[docs]</a>    <span class="k">def</span> <span class="nf">generate_go_other_office</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate the event of visiting colleagues&#39; office for random talk. Only possible if the colleague is in the office.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">visit_colleague</span><span class="p">)):</span>
@@ -614,7 +635,9 @@
 <div class="viewcode-block" id="Person.generate_daily_route"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_daily_route">[docs]</a>    <span class="k">def</span> <span class="nf">generate_daily_route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">customer_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate the whole day locations for the occupant.</span>
-<span class="sd">        :param customer_list: List of Person that will visit the occupant today.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter customer_list: List of Person that will visit the occupant today.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: List of appointment times.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">time_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -628,7 +651,9 @@
 <div class="viewcode-block" id="Person.get_position"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.get_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the location of the occupant at the given time</span>
-<span class="sd">        :param sec: The time that need to check.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter sec: The time that need to check.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: The zone entry of the location at the given time.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">sec</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;busy&quot;</span><span class="p">):</span>
@@ -642,7 +667,9 @@
 <div class="viewcode-block" id="get_white_bias"><a class="viewcode-back" href="../modules.html#occupancy_generator.get_white_bias">[docs]</a><span class="k">def</span> <span class="nf">get_white_bias</span><span class="p">(</span><span class="n">second</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a bias.</span>
-<span class="sd">    :param second: Value range.</span>
+<span class="sd">    </span>
+<span class="sd">    :parameter second: Value range.</span>
+<span class="sd">    </span>
 <span class="sd">    :return: Bias.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">second</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">second</span></div>

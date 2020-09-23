@@ -177,8 +177,11 @@
     <span class="k">def</span> <span class="nf">set_energyplus_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add the pyenergyplus into the path so the program can find the EnergyPlus.</span>
-<span class="sd">        :param path: The installation path of the EnergyPlus 9.3.0.</span>
-<span class="sd">        :return: None.</span>
+
+<span class="sd">        :parameter path: The installation path of the EnergyPlus 9.3.0.</span>
+<span class="sd">        :type path: str</span>
+
+<span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="n">IDF</span><span class="o">.</span><span class="n">setiddname</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{path}</span><span class="s2">Energy+.idd&quot;</span><span class="p">)</span>
@@ -195,13 +198,20 @@
                  <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the building by loading the IDF file to the model.</span>
-<span class="sd">        :param idf_file_name: The relative path to the IDF file. Use it if you want to use your own model.</span>
-<span class="sd">        :param prototype: Either &quot;multi&quot; and &quot;single&quot;, indicates the Multi-family low-rise apartment building and Single-family detached house.</span>
-<span class="sd">        :param climate_zone: The climate zone code of the building. Please refer to https://codes.iccsafe.org/content/iecc2018/chapter-3-ce-general-requirements.</span>
-<span class="sd">        :param weather_file: The relative path to the weather file associate with the building.</span>
-<span class="sd">        :param heating_type: Select one from &quot;electric&quot;, &quot;gas&quot;, &quot;oil&quot;, and &quot;pump&quot;</span>
-<span class="sd">        :param foundation_type: Select one from &quot;crawspace&quot;, &quot;heated&quot;, &quot;slab&quot;, and &quot;unheated&quot;</span>
-<span class="sd">        :param agent: The user-defined Agent class object if the agent is implemented in a class.</span>
+
+<span class="sd">        :parameter idf_file_name: The relative path to the IDF file. Use it if you want to use your own model.</span>
+
+<span class="sd">        :parameter prototype: Either &quot;multi&quot; and &quot;single&quot;, indicates the Multi-family low-rise apartment building and Single-family detached house.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter climate_zone: The climate zone code of the building. Please refer to https://codes.iccsafe.org/content/iecc2018/chapter-3-ce-general-requirements.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter weather_file: The relative path to the weather file associate with the building.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter heating_type: Select one from &quot;electric&quot;, &quot;gas&quot;, &quot;oil&quot;, and &quot;pump&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter foundation_type: Select one from &quot;crawspace&quot;, &quot;heated&quot;, &quot;slab&quot;, and &quot;unheated&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter agent: The user-defined Agent class object if the agent is implemented in a class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">Model</span><span class="o">.</span><span class="n">model_import_flag</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You have to set the energyplus folder first&quot;</span><span class="p">)</span>
@@ -244,7 +254,9 @@
     <span class="k">def</span> <span class="nf">name_reformat</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the entry from the space separated entry to the underline separated entry to match the IDF.</span>
-<span class="sd">        :param name: The space separated entry.</span>
+
+<span class="sd">        :parameter name: The space separated entry.</span>
+
 <span class="sd">        :return: The underline separated entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
@@ -253,6 +265,7 @@
 <div class="viewcode-block" id="Model.list_all_available_configurations"><a class="viewcode-back" href="../modules.html#model.Model.list_all_available_configurations">[docs]</a>    <span class="k">def</span> <span class="nf">list_all_available_configurations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a list of all type of components appeared in the current building.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: list of components entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
@@ -260,6 +273,7 @@
 <div class="viewcode-block" id="Model.get_all_configurations"><a class="viewcode-back" href="../modules.html#model.Model.get_all_configurations">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_configurations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read the IDF file, and return the content formatted with the IDD file.</span>
+
 <span class="sd">        :return: the full IDF file with names and comments aside.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span></div>
@@ -268,7 +282,9 @@
                               <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Show all available settings for the given type of component.</span>
-<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: List of settings entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">):</span>
@@ -279,7 +295,9 @@
                                         <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given the type of components, find all available components in the building by their entry.</span>
-<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter idf_header_name: The type of the component.</span>
+
 <span class="sd">        :return: List of names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">available_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub_configuration</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">)</span>
@@ -296,8 +314,11 @@
                           <span class="n">component_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given the type of component, the entry of the target component, find the settings of that component.</span>
-<span class="sd">        :param idf_header_name: The type of the component.</span>
-<span class="sd">        :param component_name: The entry of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter component_name: The entry of the component.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: Settings of this component.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">component_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -315,9 +336,13 @@
                         <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the range of acceptable values of the specific setting.</span>
-<span class="sd">        :param idf_header_name: The type of the component.</span>
-<span class="sd">        :param field_name: The setting entry.</span>
-<span class="sd">        :param validate: Set to True to check the current value is valid or not.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter field_name: The setting entry.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter validate: Set to True to check the current value is valid or not.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: Validation result or the range of all acceptable values retrieved from the IDD file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
@@ -333,8 +358,11 @@
                           <span class="n">values</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create and add a new component into the building model with the specific type and setting values.</span>
-<span class="sd">        :param idf_header_name: The type of the component.</span>
-<span class="sd">        :param values: A dictionary map the setting entry and the setting value.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter values: A dictionary map the setting entry and the setting value.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: The new component.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">newidfobject</span><span class="p">(</span><span class="n">idf_header_name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
@@ -353,8 +381,11 @@
                              <span class="n">component_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Delete an existing component from the building model.</span>
-<span class="sd">        :param idf_header_name: The type of the component.</span>
-<span class="sd">        :param component_name: The entry of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter component_name: The entry of the component.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">):</span>
@@ -375,9 +406,13 @@
                            <span class="n">update_values</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Edit an existing component in the building model.</span>
-<span class="sd">        :param idf_header_name: The type of the component.</span>
-<span class="sd">        :param identifier: A dictionary map the setting entry and the setting value to locate the target component.</span>
-<span class="sd">        :param update_values: A dictionary map the setting entry and the setting value that needs to update.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter idf_header_name: The type of the component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter identifier: A dictionary map the setting entry and the setting value to locate the target component.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter update_values: A dictionary map the setting entry and the setting value that needs to update.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">):</span>
@@ -401,6 +436,7 @@
     <span class="k">def</span> <span class="nf">_get_thermal_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize all available thermal zones.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">people_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="s2">&quot;People&quot;</span><span class="p">)</span>
@@ -416,7 +452,9 @@
                       <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save the modified building model for EnergyPlus simulation</span>
-<span class="sd">        :param path: The relative path to the modified IDF file.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter path: The relative path to the modified IDF file.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">saveas</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
@@ -424,6 +462,7 @@
     <span class="k">def</span> <span class="nf">_initialization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the EnergyPlus simulation by letting the EnergyPlus finish the warmup.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">api_data_fully_ready</span><span class="p">():</span>
@@ -433,14 +472,16 @@
     <span class="k">def</span> <span class="nf">_generate_output_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assert errors to terminate the simulation after the warmup in order to generate the EDD file to list all available actions for the current building.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">_step_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the state value at each timestep, and modify the building model based on the actions from the `EventQueue&#39;.</span>
+<span class="sd">        Get the state value at each timestep, and modify the building model based on the actions from the ``EventQueue``.</span>
 <span class="sd">        :return: None</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">api_data_fully_ready</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warmup_complete</span><span class="p">:</span>
             <span class="k">return</span>
@@ -501,8 +542,10 @@
 
 <div class="viewcode-block" id="Model.step"><a class="viewcode-back" href="../modules.html#model.Model.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add all actions into the `EventQueue&#39;, and then generate the state value of the next timestep.</span>
-<span class="sd">        :param action_list: list of dictionarys contains the arguments for `EventQueue.schedule_event()&#39;.</span>
+<span class="sd">        Add all actions into the ``EventQueue``, and then generate the state value of the next timestep.</span>
+
+<span class="sd">        :parameter action_list: list of dictionarys contains the arguments for ``EventQueue.schedule_event()``.</span>
+
 <span class="sd">        :return: The state value of the current timestep.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">action_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -533,6 +576,7 @@
 <div class="viewcode-block" id="Model.is_terminate"><a class="viewcode-back" href="../modules.html#model.Model.is_terminate">[docs]</a>    <span class="k">def</span> <span class="nf">is_terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if the simulation is finished or not.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: True if the simulation is done, and False otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span></div>
@@ -540,6 +584,7 @@
 <div class="viewcode-block" id="Model.reset"><a class="viewcode-back" href="../modules.html#model.Model.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clear the actions and buffer, reset the environment and start the simulation.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: The initial state of the simulation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_simulation</span><span class="p">()</span>
@@ -562,7 +607,9 @@
 <div class="viewcode-block" id="Model.simulate"><a class="viewcode-back" href="../modules.html#model.Model.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terminate_after_warmup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run the whole simulation once. If user use this method instead of the reset function, the user need to provide the Agent.</span>
-<span class="sd">        :param terminate_after_warmup: True if the simulation should terminate after the warmup.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter terminate_after_warmup: True if the simulation should terminate after the warmup.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">pyenergyplus.api</span> <span class="k">import</span> <span class="n">EnergyPlusAPI</span>
@@ -589,6 +636,7 @@
     <span class="k">def</span> <span class="nf">_init_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save the modified building model and initialize the zones for states.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">saveas</span><span class="p">(</span><span class="s2">&quot;input.idf&quot;</span><span class="p">)</span>
@@ -600,6 +648,7 @@
 <div class="viewcode-block" id="Model.get_current_state_values"><a class="viewcode-back" href="../modules.html#model.Model.get_current_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the current entries in the state.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: List of entry names that is currently available in the state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">state_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_possible_state_entries</span><span class="p">())</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="p">)</span>
@@ -609,8 +658,11 @@
 <div class="viewcode-block" id="Model.select_state_values"><a class="viewcode-back" href="../modules.html#model.Model.select_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">select_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Select interested state entries. If selected entry is not available for the current building, it will be ignored.</span>
-<span class="sd">        :param entry: Entry names that the state of the environment should have.</span>
-<span class="sd">        :param index: Index of all available entries that the state of the environment should have.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter entry: Entry names that the state of the environment should have.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter index: Index of all available entries that the state of the environment should have.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">current_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_state_values</span><span class="p">()</span>
@@ -629,7 +681,9 @@
 <div class="viewcode-block" id="Model.add_state_values"><a class="viewcode-back" href="../modules.html#model.Model.add_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">add_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add entries to the state. If selected entry is not available for the current building, it will be ignored.</span>
-<span class="sd">        :param entry: Entry names that the state of the environment should have.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter entry: Entry names that the state of the environment should have.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="p">:</span>
@@ -642,7 +696,9 @@
 <div class="viewcode-block" id="Model.remove_state_values"><a class="viewcode-back" href="../modules.html#model.Model.remove_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">remove_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove entries from the state. If selected entry is not available in the state, it will be ignored.</span>
-<span class="sd">        :param entry: Entry names that the state of the environment should not have.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter entry: Entry names that the state of the environment should not have.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -652,7 +708,9 @@
 <div class="viewcode-block" id="Model.pop_state_values"><a class="viewcode-back" href="../modules.html#model.Model.pop_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">pop_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove entries from the state by its index. If selected index is not available in the state, it will be ignored.</span>
-<span class="sd">        :param index: Entry index that the state of the environment should not have.</span>
+<span class="sd">        </span>
+<span class="sd">        :parameter index: Entry index that the state of the environment should not have.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: All entry names that is removed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">current_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_state_values</span><span class="p">()</span>
@@ -669,6 +727,7 @@
 <div class="viewcode-block" id="Model.get_possible_state_entries"><a class="viewcode-back" href="../modules.html#model.Model.get_possible_state_entries">[docs]</a>    <span class="k">def</span> <span class="nf">get_possible_state_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all available state entries. This list of entries only depends on the building architecture.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: List of available state entry names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -679,6 +738,7 @@
 <div class="viewcode-block" id="Model.get_possible_actions"><a class="viewcode-back" href="../modules.html#model.Model.get_possible_actions">[docs]</a>    <span class="k">def</span> <span class="nf">get_possible_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all available actions that the user-defined agent can take. This list of actions only depends on the building architecture.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: List of available actions in dictionaries.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;./result/eplusout.edd&quot;</span><span class="p">):</span>
@@ -707,6 +767,7 @@
 <div class="viewcode-block" id="Model.get_link_zones"><a class="viewcode-back" href="../modules.html#model.Model.get_link_zones">[docs]</a>    <span class="k">def</span> <span class="nf">get_link_zones</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a graph that shows the connectivity of zones of the current building.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: A bi-directional graph represented by a dictionary where the key is the source zone name and the value is a set of all neighbor zone name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">link_zones</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Outdoor&quot;</span><span class="p">:</span> <span class="nb">set</span><span class="p">()}</span>
