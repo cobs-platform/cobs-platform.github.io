@@ -1,0 +1,731 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>occupancy_generator &mdash; COBS Early Acccess 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> COBS
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">COBS Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Credits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">COBS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>occupancy_generator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for occupancy_generator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">choice</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+
+<div class="viewcode-block" id="OccupancyGenerator"><a class="viewcode-back" href="../modules.html#occupancy_generator.OccupancyGenerator">[docs]</a><span class="k">class</span> <span class="nc">OccupancyGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class use the queueing system to generate the occupancy schedule</span>
+<span class="sd">    TODO: Add occupancy actions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">model</span><span class="p">,</span>
+                 <span class="n">num_occupant</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This class contains multiple editable attributes to generate the occupancy schedule. Default setting includes:</span>
+<span class="sd">        Work shift: 9:00 ~ 17:00, where people start arriving/leaving 30 minutes earily.</span>
+<span class="sd">        Group meeting: 16:00, once per day, last average 15 minutes.</span>
+<span class="sd">        Lunch time: 12:00 ~ 13:00.</span>
+<span class="sd">        Call for absence probability: 1%.</span>
+<span class="sd">        Chat with colleague: average 30 minutes each.</span>
+<span class="sd">        Customer service time: average 30 minutes each.</span>
+<span class="sd">        Average number of guests per day: 3.</span>
+<span class="sd">        </span>
+<span class="sd">        :param model: The `COBS.Model&#39; class object as the target building model.</span>
+<span class="sd">        :param num_occupant: The number of long-term occupants belongs to the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_work</span> <span class="o">=</span> <span class="mi">9</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Work start from 9:00. unit: second</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_work</span> <span class="o">=</span> <span class="mi">17</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Work end at 17:00. unit: second</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daily_report</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Daily progress report at 16:00, in meeting room</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daily_report_mean</span> <span class="o">=</span> <span class="mi">15</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Daily progress report average length 15 min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daily_report_std</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Daily progress report std.dev 1 min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">come_leave_flex_coef</span> <span class="o">=</span> <span class="mi">30</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Tend to come 8:30, average arrive at 9:00. Leave is similar. Exponential distribution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call_for_absence</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># Possibility of not come to the office</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lunch_start_time</span> <span class="o">=</span> <span class="mi">12</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Lunch serve start time 12:00. unit: second</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lunch_end_time</span> <span class="o">=</span> <span class="mi">13</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># Lunch serve end time 13:00. unit: second</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eat_time_a</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># average time for each person to eat lunch. Beta distribution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eat_time_b</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># average time for each person to eat lunch. Beta distribution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cut_off_time</span> <span class="o">=</span> <span class="mi">14</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># After this time, the person won&#39;t come to work</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">day_cut_off</span> <span class="o">=</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_synthetic_data</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>  <span class="c1"># start date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_synthetic_data</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">27</span><span class="p">)</span>  <span class="c1"># end date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_interval</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>  <span class="c1"># Time interval between two consecutive package</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guest_lambda</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># Poisson arrival for unknown customers. unit: person per day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visit_colleague</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># How many times a worker goes to a colleague&#39;s office</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_stay_in_colleague_office</span> <span class="o">=</span> <span class="mi">30</span> <span class="o">*</span> <span class="mi">60</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">std_stay_in_colleague_office</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">60</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_stay_customer</span> <span class="o">=</span> <span class="mi">30</span> <span class="o">*</span> <span class="mi">60</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">std_stay_customer</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span>
+        <span class="c1"># TODO: Add zone trespass time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="s2">&quot;Zone&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">work_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zone_link</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_link_zones</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meeting_room</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lunch_room</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_zone</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zone_link</span><span class="p">[</span><span class="s2">&quot;Outdoor&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Outdoor&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;busy&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">work_zones</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lunch_room</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">meeting_room</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunch_room</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">work_zones</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meeting_room</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker_assign</span> <span class="o">=</span> <span class="p">[</span><span class="n">Person</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">office</span><span class="o">=</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">work_zones</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_occupant</span><span class="p">)]</span>
+
+        <span class="c1"># value = (np.random.beta(eat_time_a, eat_time_b, 10000) + 0.1) * 100</span>
+
+<div class="viewcode-block" id="OccupancyGenerator.get_path"><a class="viewcode-back" href="../modules.html#occupancy_generator.OccupancyGenerator.get_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use BFS to find the shortest path between two zones.</span>
+
+<span class="sd">        :param start: The entry of the start zone.</span>
+<span class="sd">        :param end: The entry of the target zone.</span>
+<span class="sd">        :return: A list of zone names that the occupant need to cross.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="p">[(</span><span class="n">start</span><span class="p">,</span> <span class="p">[</span><span class="n">start</span><span class="p">])]</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+            <span class="n">vertex</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_link</span><span class="p">[</span><span class="n">vertex</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="n">end</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">path</span> <span class="o">+</span> <span class="p">[</span><span class="n">end</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                        <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                        <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="p">[</span><span class="n">node</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OccupancyGenerator.generate_all_people_daily_movement"><a class="viewcode-back" href="../modules.html#occupancy_generator.OccupancyGenerator.generate_all_people_daily_movement">[docs]</a>    <span class="k">def</span> <span class="nf">generate_all_people_daily_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a list of `Person&#39; objects and simulate the movement for each person.</span>
+<span class="sd">        :return: list of `Person&#39; objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">available_worker</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_assign</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">worker</span><span class="o">.</span><span class="n">decide_come</span><span class="p">():</span>
+                <span class="n">available_worker</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># print(available_worker)</span>
+
+        <span class="n">guests</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guest_lambda</span><span class="p">)</span>
+        <span class="n">guest_assign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">available_worker</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">guests</span><span class="p">)</span>
+        <span class="n">all_people</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">guest_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">available_worker</span><span class="p">:</span>
+            <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_assign</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">all_people</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+            <span class="n">guest_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">guest_assign</span> <span class="o">==</span> <span class="n">i</span><span class="p">))</span>
+            <span class="n">appointments</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">generate_daily_route</span><span class="p">(</span><span class="n">guest_list</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">appointment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">appointments</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">guest_list</span><span class="p">[</span><span class="n">j</span><span class="p">]):</span>
+                    <span class="n">new_guest</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                    <span class="n">guest_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">new_guest</span><span class="o">.</span><span class="n">customer_come</span><span class="p">(</span><span class="o">*</span><span class="n">appointment</span><span class="p">)</span>
+                    <span class="n">all_people</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_guest</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_people</span></div>
+
+<div class="viewcode-block" id="OccupancyGenerator.generate_daily_schedule"><a class="viewcode-back" href="../modules.html#occupancy_generator.OccupancyGenerator.generate_daily_schedule">[docs]</a>    <span class="k">def</span> <span class="nf">generate_daily_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">add_to_model</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a numpy matrix contains the locations of all occupants in the day and add tp the model.</span>
+<span class="sd">        :param add_to_model: Default is True. If False, then only generate the schedule in numpy and IDF format but not save to the model automatically.</span>
+<span class="sd">        :return: Three objects, (IDF format schedule, numpy format schedule, list of all accessble locations in the building).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="s2">&quot;Zone&quot;</span><span class="p">)</span>
+        <span class="n">valid_zones</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">zone</span> <span class="ow">in</span> <span class="n">all_zones</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">zone</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="p">:</span>
+                <span class="n">valid_zones</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
+        <span class="n">all_people</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_all_people_daily_movement</span><span class="p">()</span>
+        <span class="n">locations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">all_people</span><span class="p">:</span>
+            <span class="n">locations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">office</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">locations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">locations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;busy&#39;</span><span class="p">)]</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">office</span><span class="p">)</span>
+
+        <span class="n">location_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">locations</span><span class="p">)</span>
+        <span class="n">all_commands</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">add_to_model</span><span class="p">:</span>
+            <span class="n">activity_values</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Activity_Schedule&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Schedule Type Limits Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Any Number&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 1&quot;</span><span class="p">:</span> <span class="s2">&quot;Through:12/31&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 2&quot;</span><span class="p">:</span> <span class="s2">&quot;For: Alldays&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 3&quot;</span><span class="p">:</span> <span class="s2">&quot;Until 24:00&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 4&quot;</span><span class="p">:</span> <span class="s2">&quot;200&quot;</span><span class="p">}</span>
+
+            <span class="n">work_efficiency</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Work_Schedule&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Schedule Type Limits Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Fraction&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 1&quot;</span><span class="p">:</span> <span class="s2">&quot;Through:12/31&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 2&quot;</span><span class="p">:</span> <span class="s2">&quot;For: Alldays&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 3&quot;</span><span class="p">:</span> <span class="s2">&quot;Until 24:00&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Field 4&quot;</span><span class="p">:</span> <span class="s2">&quot;0.1&quot;</span><span class="p">}</span>
+
+            <span class="n">cloth_schedule</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Cloth_Schedule&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Schedule Type Limits Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Fraction&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Field 1&quot;</span><span class="p">:</span> <span class="s2">&quot;Through:12/31&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Field 2&quot;</span><span class="p">:</span> <span class="s2">&quot;For: Alldays&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Field 3&quot;</span><span class="p">:</span> <span class="s2">&quot;Until 24:00&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Field 4&quot;</span><span class="p">:</span> <span class="s2">&quot;0.9&quot;</span><span class="p">}</span>
+
+            <span class="n">air_velocity</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Air_Velocity&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Schedule Type Limits Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Fraction&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Field 1&quot;</span><span class="p">:</span> <span class="s2">&quot;Through:12/31&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Field 2&quot;</span><span class="p">:</span> <span class="s2">&quot;For: Alldays&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Field 3&quot;</span><span class="p">:</span> <span class="s2">&quot;Until 24:00&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Field 4&quot;</span><span class="p">:</span> <span class="s2">&quot;0.25&quot;</span><span class="p">}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Schedule:Compact&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">activity_values</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Schedule:Compact&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">work_efficiency</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Schedule:Compact&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">cloth_schedule</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Schedule:Compact&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">air_velocity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Output:Variable&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Variable Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone People Occupant Count&quot;</span><span class="p">,</span>
+                                                                    <span class="s2">&quot;Reporting_Frequency&quot;</span><span class="p">:</span> <span class="s2">&quot;timestep&quot;</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Output:Variable&quot;</span><span class="p">,</span>
+                                         <span class="n">values</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Variable Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone Thermal Comfort Fanger Model PMV&quot;</span><span class="p">,</span>
+                                                 <span class="s2">&quot;Reporting_Frequency&quot;</span><span class="p">:</span> <span class="s2">&quot;timestep&quot;</span><span class="p">})</span>
+
+        <span class="n">zone_occupancy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="p">),</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">zone</span> <span class="ow">in</span> <span class="n">valid_zones</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
+            <span class="n">occupancy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">location_matrix</span> <span class="o">==</span> <span class="n">i</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">result_command</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;Generated_Schedule_Zone_</span><span class="si">{zone}</span><span class="s2">&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Schedule Type Limits Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Any Number&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Field 1&quot;</span><span class="p">:</span> <span class="s2">&quot;Through: 12/31&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Field 2&quot;</span><span class="p">:</span> <span class="s2">&quot;For: Weekdays&quot;</span><span class="p">}</span>
+
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">zone_occupancy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">occupancy</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="o">!=</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="ow">and</span> <span class="n">occupancy</span><span class="p">[(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">occupancy</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="n">hour</span> <span class="o">=</span> <span class="n">t</span> <span class="o">//</span> <span class="mi">60</span>
+                <span class="nb">min</span> <span class="o">=</span> <span class="n">t</span> <span class="o">%</span> <span class="mi">60</span>
+                <span class="n">result_command</span><span class="p">[</span><span class="n">f</span><span class="s2">&quot;Field </span><span class="si">{counter}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Until </span><span class="si">{hour:02d}</span><span class="s2">:</span><span class="si">{min:02d}</span><span class="s2">&quot;</span>
+                <span class="n">result_command</span><span class="p">[</span><span class="n">f</span><span class="s2">&quot;Field {counter + 1}&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{occupancy[t * 60 - 1]}</span><span class="s2">&quot;</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">2</span>
+
+            <span class="n">all_commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_command</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">add_to_model</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Schedule:Compact&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">result_command</span><span class="p">)</span>
+
+                <span class="n">people_values</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;Test_Zone_</span><span class="si">{zone}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Zone or ZoneList Name&quot;</span><span class="p">:</span> <span class="n">zone</span><span class="p">,</span>
+                                 <span class="s2">&quot;Number of People Schedule Name&quot;</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;Generated_Schedule_Zone_</span><span class="si">{zone}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Number of People&quot;</span><span class="p">:</span> <span class="n">location_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                 <span class="s2">&quot;Activity Level Schedule Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Activity_Schedule&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Work Efficiency Schedule Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Work_Schedule&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Clothing Insulation Schedule Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Cloth_Schedule&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Air Velocity Schedule Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Air_Velocity&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Thermal Comfort Model 1 Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Fanger&quot;</span><span class="p">}</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;People&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">people_values</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_commands</span><span class="p">,</span> <span class="n">location_matrix</span><span class="p">,</span> <span class="n">zone_occupancy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_locations</span></div></div>
+
+
+<div class="viewcode-block" id="Person"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person">[docs]</a><span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class contains the detail location of a single occupant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">office</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Each long-term occupant will have an office, and he tend to stay in office more than other places.</span>
+<span class="sd">        :param generator: The OccupancyGenerator which provides the settings.</span>
+<span class="sd">        :param office: The designated office for long-term occupants.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">office</span> <span class="o">=</span> <span class="n">office</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">day_cut_off</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">generator</span>
+
+<div class="viewcode-block" id="Person.customer_come"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.customer_come">[docs]</a>    <span class="k">def</span> <span class="nf">customer_come</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulate the event of customers coming for the current occupant.</span>
+<span class="sd">        :param start_time: The scheduled appointment start time (not the real start time).</span>
+<span class="sd">        :param end_time: The scheduled appointment end time (not the real end time).</span>
+<span class="sd">        :param dest: The appointment location (zone entry).</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pass_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">entry_zone</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+
+        <span class="n">zone_move_timer</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1"># real_start_time = start_time - int(np.random.exponential(5 * 60))  # Come eariler than expected</span>
+        <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start_time</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)))</span>  <span class="c1"># Come eariler than expected</span>
+        <span class="c1"># decide the time takes from Room_1_1_150 door to the meeting room</span>
+        <span class="c1"># TODO: Trespass time</span>
+        <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">start_time</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">temp_timer</span><span class="p">)</span>
+
+        <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">end_time</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">:</span>
+            <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_timer</span><span class="p">)</span>
+            <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Apply to the daily route</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zone_move_timer</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Person.decide_come"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.decide_come">[docs]</a>    <span class="k">def</span> <span class="nf">decide_come</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Each person need to decide if he/she will come to work today, when exactly they come, and when exactly</span>
+<span class="sd">        they leave. Each person target to come at 8:30 am and leave at 5 pm, with a exponential distribution where</span>
+<span class="sd">        mu = 30 minute. Use exponential distribution because people tend to come/leave on time with a very small</span>
+<span class="sd">        chance of being late. In the meantime, assume that people directly goes into their own office right away.</span>
+<span class="sd">        They require some time to walk to their office.</span>
+<span class="sd">        :return: True if come to work, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">day_cut_off</span><span class="p">)</span>
+        <span class="c1"># Decide absence</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">call_for_absence</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Decide when come to office</span>
+            <span class="n">arrival_time</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">start_work</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">come_leave_flex_coef</span><span class="p">)</span> <span class="o">+</span> \
+                           <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">come_leave_flex_coef</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">arrival_time</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">cut_off_time</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Decide when go back home</span>
+                <span class="n">leave_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">end_work</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">come_leave_flex_coef</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">leave_time</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">day_cut_off</span><span class="p">:</span>
+                    <span class="n">leave_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">day_cut_off</span> <span class="o">-</span> <span class="mi">1</span>
+
+                <span class="n">pass_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">entry_zone</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">office</span><span class="p">)</span>
+
+                <span class="n">zone_move_timer</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="c1"># TODO: Trespass time</span>
+                <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">arrival_time</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">:</span>
+                    <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_timer</span><span class="p">)</span>
+                    <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">leave_time</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">:</span>
+                    <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">),</span> <span class="n">temp_timer</span><span class="p">)</span>
+                    <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="c1"># Apply to the daily route</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zone_move_timer</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                            <span class="n">pass_zones</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+                <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Person.generate_lunch"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_lunch">[docs]</a>    <span class="k">def</span> <span class="nf">generate_lunch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the time that current occupant go to the cafeteria and take the lunch.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Usually go for lunch immediately, with average delay of 5 minute</span>
+        <span class="n">lunch_delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span><span class="p">))</span>
+        <span class="n">lunch_delay</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lunch_delay</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+        <span class="n">pass_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">office</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">lunch_room</span><span class="p">)</span>
+        <span class="n">pass_zones</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">zone_move_timer</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">lunch_start_time</span><span class="p">]</span>
+        <span class="c1"># TODO: Trespass time</span>
+        <span class="n">temp_timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">lunch_start_time</span> <span class="o">+</span> <span class="n">lunch_delay</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_timer</span><span class="p">)</span>
+
+        <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_timer</span> <span class="o">+</span>
+                               <span class="nb">int</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">eat_time_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">eat_time_b</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6000</span><span class="p">))</span>
+
+        <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">zone_move_timer</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_timer</span><span class="p">)</span>
+
+        <span class="c1"># Apply to the daily route</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zone_move_timer</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                    <span class="n">pass_zones</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Person.generate_daily_meeting"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_daily_meeting">[docs]</a>    <span class="k">def</span> <span class="nf">generate_daily_meeting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the time that current occupant go to the daily meeting.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Arrive maximum 3 min early, 2 min late</span>
+        <span class="n">meeting_attend</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">60</span><span class="p">))</span>
+        <span class="n">meeting_attend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">daily_report</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">meeting_attend</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+        <span class="n">pass_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">office</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">meeting_room</span><span class="p">)</span>
+        <span class="n">pass_zones</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">zone_move_timer</span> <span class="o">=</span> <span class="p">[</span><span class="n">meeting_attend</span><span class="p">]</span>
+        <span class="c1"># TODO: Trespass time</span>
+        <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">meeting_attend</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">temp_timer</span><span class="p">)</span>
+
+        <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">daily_report</span> <span class="o">+</span>
+                               <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">daily_report_mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">daily_report_std</span><span class="p">)))</span>
+
+        <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">zone_move_timer</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pass_zones</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">temp_timer</span> <span class="o">=</span> <span class="n">temp_timer</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">zone_move_timer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_timer</span><span class="p">)</span>
+
+        <span class="c1"># Apply to the daily route</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zone_move_timer</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">zone_move_timer</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                    <span class="n">pass_zones</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pass_zones</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Person.check_in_office"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.check_in_office">[docs]</a>    <span class="k">def</span> <span class="nf">check_in_office</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the occupant is in his/her office or not during a given period of time.</span>
+<span class="sd">        :param start: The start time.</span>
+<span class="sd">        :param end: The end time.</span>
+<span class="sd">        :return: Return True if the occupant is in his/her office between given time, and False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">office</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Person.get_in_office_range"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.get_in_office_range">[docs]</a>    <span class="k">def</span> <span class="nf">get_in_office_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find all times that the occupant is in his/her office.</span>
+<span class="sd">        :return: list of timeslots that the occupant is in the office</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">in_office</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span>
+                                    <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">office</span><span class="p">))</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">),</span>
+                                    <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">absdiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">in_office</span><span class="p">))</span>
+        <span class="c1"># Runs start and end where absdiff is 1.</span>
+        <span class="n">ranges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">absdiff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ranges</span></div>
+
+<div class="viewcode-block" id="Person.handle_customer"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.handle_customer">[docs]</a>    <span class="k">def</span> <span class="nf">handle_customer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_customer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set up an appointment for occupant with some new customers.</span>
+<span class="sd">        :param num_customer: Number of customers in total today will come.</span>
+<span class="sd">        :return: tuple of (appointment start time, appointment end time, appointment location).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Set-up meeting time</span>
+        <span class="n">in_office_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_in_office_range</span><span class="p">()</span>
+        <span class="n">visit_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">average_stay_customer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">std_stay_customer</span><span class="p">))</span>
+        <span class="n">in_office_duration</span> <span class="o">=</span> <span class="n">in_office_range</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">in_office_range</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">in_office_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">in_office_duration</span> <span class="o">&gt;</span> <span class="n">visit_length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_office_idx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">visit_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">in_office_duration</span><span class="p">)</span>
+            <span class="n">in_office_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">in_office_duration</span> <span class="o">==</span> <span class="n">visit_length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">in_office_idx</span><span class="p">)</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">in_office_range</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">in_office_range</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">visit_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="n">visit_length</span>
+
+        <span class="n">in_room</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">out_room</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Decide meeting location</span>
+        <span class="k">if</span> <span class="n">num_customer</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Go meet in meeting room</span>
+            <span class="n">room_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">meeting_room</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">in_room</span><span class="p">:</span><span class="n">out_room</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">meeting_room</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">in_room</span><span class="p">:</span><span class="n">out_room</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;busy&quot;</span><span class="p">)</span>
+            <span class="n">room_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">office</span>
+
+        <span class="k">return</span> <span class="n">in_room</span><span class="p">,</span> <span class="n">out_room</span><span class="p">,</span> <span class="n">room_name</span></div>
+
+<div class="viewcode-block" id="Person.generate_go_other_office"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_go_other_office">[docs]</a>    <span class="k">def</span> <span class="nf">generate_go_other_office</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the event of visiting colleagues&#39; office for random talk. Only possible if the colleague is in the office.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">visit_colleague</span><span class="p">)):</span>
+            <span class="c1"># Find available time for current person to meet some colleague</span>
+            <span class="n">in_office_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_in_office_range</span><span class="p">()</span>
+            <span class="n">visit_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">average_stay_in_colleague_office</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">std_stay_in_colleague_office</span><span class="p">))</span>
+            <span class="n">in_office_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">in_office_range</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">in_office_range</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">visit_length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_office_idx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">in_office_idx</span><span class="p">)</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">in_office_range</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">in_office_range</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">visit_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="n">visit_length</span>
+
+            <span class="c1"># Find available colleague</span>
+            <span class="k">for</span> <span class="n">coworker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">worker_assign</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">coworker</span><span class="o">.</span><span class="n">check_in_office</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">):</span>
+                    <span class="c1"># Go meet the colleague</span>
+                    <span class="n">in_colleague</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">out_colleague</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">get_white_bias</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">in_colleague</span><span class="p">:</span><span class="n">out_colleague</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">coworker</span><span class="o">.</span><span class="n">office</span><span class="p">)</span>
+                    <span class="n">coworker</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">in_colleague</span><span class="p">:</span><span class="n">out_colleague</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;busy&quot;</span><span class="p">)</span>
+                    <span class="k">break</span></div>
+
+<div class="viewcode-block" id="Person.generate_daily_route"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.generate_daily_route">[docs]</a>    <span class="k">def</span> <span class="nf">generate_daily_route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">customer_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the whole day locations for the occupant.</span>
+<span class="sd">        :param customer_list: List of Person that will visit the occupant today.</span>
+<span class="sd">        :return: List of appointment times.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">time_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_lunch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_daily_meeting</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">num_customer</span> <span class="ow">in</span> <span class="n">customer_list</span><span class="p">:</span>
+            <span class="n">time_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_customer</span><span class="p">(</span><span class="n">num_customer</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_go_other_office</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">time_list</span></div>
+
+<div class="viewcode-block" id="Person.get_position"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.get_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the location of the occupant at the given time</span>
+<span class="sd">        :param sec: The time that need to check.</span>
+<span class="sd">        :return: The zone entry of the location at the given time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">sec</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;busy&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">office</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">possible_locations</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="n">sec</span><span class="p">])]</span></div>
+
+<div class="viewcode-block" id="Person.get_trigger"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.get_trigger">[docs]</a>    <span class="k">def</span> <span class="nf">get_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="get_white_bias"><a class="viewcode-back" href="../modules.html#occupancy_generator.get_white_bias">[docs]</a><span class="k">def</span> <span class="nf">get_white_bias</span><span class="p">(</span><span class="n">second</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a bias.</span>
+<span class="sd">    :param second: Value range.</span>
+<span class="sd">    :return: Bias.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">second</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">second</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../modules.html#occupancy_generator.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">all_people</span> <span class="o">=</span> <span class="n">generate_daily_data</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">all_people</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">size</span><span class="p">)</span></div>
+        <span class="c1"># print(list(person.position))</span>
+
+    <span class="c1"># current = start_synthetic_data</span>
+    <span class="c1"># all_people = list()</span>
+    <span class="c1"># results = dict()</span>
+    <span class="c1"># for _ in range(int((end_synthetic_data - start_synthetic_data) / report_interval)):</span>
+    <span class="c1">#     # print(current)</span>
+    <span class="c1">#     results[str(current)[-8:].replace(&#39;:&#39;, &#39;_&#39;)] = dict()</span>
+    <span class="c1">#     if current.hour + current.minute + current.second == 0:</span>
+    <span class="c1">#         # Generate a whole day data</span>
+    <span class="c1">#         all_people = generate_daily_data()</span>
+    <span class="c1">#     # for person in all_people:</span>
+    <span class="c1">#     #     print(person.get_position(current.second + 60 * current.minute + 60 * 60 * current.hour))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     current += report_interval</span>
+    <span class="c1">#</span>
+    <span class="c1">#     if current.hour + current.minute + current.second == 0:</span>
+    <span class="c1">#         time_str = str(current)[:10].replace(&#39; &#39;, &#39;_&#39;).replace(&#39;-&#39;, &#39;_&#39;)</span>
+    <span class="c1">#         with open(f&quot;output/{time_str}&quot;, &#39;w&#39;) as json_out:</span>
+    <span class="c1">#             json.dump(results, json_out)</span>
+    <span class="c1">#         results = dict()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Sustainable Computing Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

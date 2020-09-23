@@ -1,0 +1,25 @@
+************
+Dependencies
+************
+
+COBS is built on top of several Python packages. The packages used to develop this toolkit are listed below.
+
++--------------+----------------------------+----------------+------------------+
+| Package Name | Usage in ODToolkit         | Latest Version | Required Version |
++==============+============================+================+==================+
+| Numpy_       | Main data structure        | |numpy|        | 1.16.0           |
++--------------+----------------------------+----------------+------------------+
+| Eppy_        | Built-in models            | |eppy|         | 0.5.52           |
++--------------+----------------------------+----------------+------------------+
+
+.. _Numpy: https://www.numpy.org/
+.. _Eppy: https://eppy.readthedocs.io/en/latest/Main_Tutorial.html
+
+.. only:: html
+
+    .. |numpy| image:: https://badge.fury.io/py/numpy.svg
+        :target: https://badge.fury.io/py/numpy
+
+    .. |eppy| image:: https://badge.fury.io/py/eppy.svg
+        :target: https://badge.fury.io/py/eppy
+

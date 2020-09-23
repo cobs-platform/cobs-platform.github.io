@@ -1,0 +1,614 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API documentation &mdash; COBS Early Acccess 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Installation" href="installing.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> COBS
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">ODToolkit Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-model">model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-occupancy_generator">occupancy_generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-eventqueue">eventqueue module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">COBS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-documentation">
+<h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-model">
+<span id="model-module"></span><h2>model module<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.Agent">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Agent</code><a class="reference internal" href="_modules/model.html#Agent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#object" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Dummy agent as a placeholder. No meaning</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="model.Model">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>idf_file_name: str = None</em>, <em>prototype: str = None</em>, <em>climate_zone: str = None</em>, <em>weather_file: str = None</em>, <em>heating_type: str = None</em>, <em>foundation_type: str = None</em>, <em>agent: model.Agent = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#object" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The environment class.</p>
+<dl class="method">
+<dt id="model.Model.add_configuration">
+<code class="descname">add_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>values: dict = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.add_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.add_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and add a new component into the building model with the specific type and setting values.
+:param idf_header_name: The type of the component.
+:param values: A dictionary map the setting entry and the setting value.
+:return: The new component.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.add_state_values">
+<code class="descname">add_state_values</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.add_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.add_state_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add entries to the state. If selected entry is not available for the current building, it will be ignored.
+:param entry: Entry names that the state of the environment should have.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.delete_configuration">
+<code class="descname">delete_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>component_name: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.delete_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.delete_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete an existing component from the building model.
+:param idf_header_name: The type of the component.
+:param component_name: The entry of the component.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.edit_configuration">
+<code class="descname">edit_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>identifier: dict</em>, <em>update_values: dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.edit_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.edit_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edit an existing component in the building model.
+:param idf_header_name: The type of the component.
+:param identifier: A dictionary map the setting entry and the setting value to locate the target component.
+:param update_values: A dictionary map the setting entry and the setting value that needs to update.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_all_configurations">
+<code class="descname">get_all_configurations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_all_configurations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_all_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the IDF file, and return the content formatted with the IDD file.
+:return: the full IDF file with names and comments aside.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_available_names_under_group">
+<code class="descname">get_available_names_under_group</code><span class="sig-paren">(</span><em>idf_header_name: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_available_names_under_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_available_names_under_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the type of components, find all available components in the building by their entry.
+:param idf_header_name: The type of the component.
+:return: List of names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_configuration">
+<code class="descname">get_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>component_name: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the type of component, the entry of the target component, find the settings of that component.
+:param idf_header_name: The type of the component.
+:param component_name: The entry of the component.
+:return: Settings of this component.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_current_state_values">
+<code class="descname">get_current_state_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_current_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_current_state_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the current entries in the state.
+:return: List of entry names that is currently available in the state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_link_zones">
+<code class="descname">get_link_zones</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_link_zones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_link_zones" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a graph that shows the connectivity of zones of the current building.
+:return: A bi-directional graph represented by a dictionary where the key is the source zone name and the value is a set of all neighbor zone name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_possible_actions">
+<code class="descname">get_possible_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_possible_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_possible_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all available actions that the user-defined agent can take. This list of actions only depends on the building architecture.
+:return: List of available actions in dictionaries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_possible_state_entries">
+<code class="descname">get_possible_state_entries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_possible_state_entries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_possible_state_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all available state entries. This list of entries only depends on the building architecture.
+:return: List of available state entry names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_sub_configuration">
+<code class="descname">get_sub_configuration</code><span class="sig-paren">(</span><em>idf_header_name: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_sub_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_sub_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show all available settings for the given type of component.
+:param idf_header_name: The type of the component.
+:return: List of settings entry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.get_value_range">
+<code class="descname">get_value_range</code><span class="sig-paren">(</span><em>idf_header_name: str</em>, <em>field_name: str</em>, <em>validate: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.get_value_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.get_value_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the range of acceptable values of the specific setting.
+:param idf_header_name: The type of the component.
+:param field_name: The setting entry.
+:param validate: Set to True to check the current value is valid or not.
+:return: Validation result or the range of all acceptable values retrieved from the IDD file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.is_terminate">
+<code class="descname">is_terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.is_terminate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.is_terminate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the simulation is finished or not.
+:return: True if the simulation is done, and False otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.list_all_available_configurations">
+<code class="descname">list_all_available_configurations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.list_all_available_configurations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.list_all_available_configurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a list of all type of components appeared in the current building.
+:return: list of components entry.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Model.model_import_flag">
+<code class="descname">model_import_flag</code><em class="property"> = False</em><a class="headerlink" href="#model.Model.model_import_flag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.Model.name_reformat">
+<em class="property">static </em><code class="descname">name_reformat</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.name_reformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.name_reformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the entry from the space separated entry to the underline separated entry to match the IDF.
+:param name: The space separated entry.
+:return: The underline separated entry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.pop_state_values">
+<code class="descname">pop_state_values</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.pop_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.pop_state_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove entries from the state by its index. If selected index is not available in the state, it will be ignored.
+:param index: Entry index that the state of the environment should not have.
+:return: All entry names that is removed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.remove_state_values">
+<code class="descname">remove_state_values</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.remove_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.remove_state_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove entries from the state. If selected entry is not available in the state, it will be ignored.
+:param entry: Entry names that the state of the environment should not have.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the actions and buffer, reset the environment and start the simulation.
+:return: The initial state of the simulation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.save_idf_file">
+<code class="descname">save_idf_file</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.save_idf_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.save_idf_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the modified building model for EnergyPlus simulation
+:param path: The relative path to the modified IDF file.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.select_state_values">
+<code class="descname">select_state_values</code><span class="sig-paren">(</span><em>entry=None</em>, <em>index=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.select_state_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.select_state_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select interested state entries. If selected entry is not available for the current building, it will be ignored.
+:param entry: Entry names that the state of the environment should have.
+:param index: Index of all available entries that the state of the environment should have.
+:return: None.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="model.Model.set_energyplus_folder">
+<em class="property">classmethod </em><code class="descname">set_energyplus_folder</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.set_energyplus_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.set_energyplus_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the pyenergyplus into the path so the program can find the EnergyPlus.
+:param path: The installation path of the EnergyPlus 9.3.0.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>terminate_after_warmup=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.simulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the whole simulation once. If user use this method instead of the reset function, the user need to provide the Agent.
+:param terminate_after_warmup: True if the simulation should terminate after the warmup.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Model.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>action_list: list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Model.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Model.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add all actions into the <a href="#id1"><span class="problematic" id="id2">`</span></a>EventQueue’, and then generate the state value of the next timestep.
+:param action_list: list of dictionarys contains the arguments for <a href="#id3"><span class="problematic" id="id4">`</span></a>EventQueue.schedule_event()’.
+:return: The state value of the current timestep.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-occupancy_generator">
+<span id="occupancy-generator-module"></span><h2>occupancy_generator module<a class="headerlink" href="#module-occupancy_generator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="occupancy_generator.OccupancyGenerator">
+<em class="property">class </em><code class="descclassname">occupancy_generator.</code><code class="descname">OccupancyGenerator</code><span class="sig-paren">(</span><em>model</em>, <em>num_occupant=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#OccupancyGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.OccupancyGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#object" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class use the queueing system to generate the occupancy schedule
+TODO: Add occupancy actions</p>
+<dl class="method">
+<dt id="occupancy_generator.OccupancyGenerator.generate_all_people_daily_movement">
+<code class="descname">generate_all_people_daily_movement</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#OccupancyGenerator.generate_all_people_daily_movement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.OccupancyGenerator.generate_all_people_daily_movement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a list of <a href="#id5"><span class="problematic" id="id6">`</span></a>Person’ objects and simulate the movement for each person.
+:return: list of <a href="#id7"><span class="problematic" id="id8">`</span></a>Person’ objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.OccupancyGenerator.generate_daily_schedule">
+<code class="descname">generate_daily_schedule</code><span class="sig-paren">(</span><em>add_to_model=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#OccupancyGenerator.generate_daily_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.OccupancyGenerator.generate_daily_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a numpy matrix contains the locations of all occupants in the day and add tp the model.
+:param add_to_model: Default is True. If False, then only generate the schedule in numpy and IDF format but not save to the model automatically.
+:return: Three objects, (IDF format schedule, numpy format schedule, list of all accessble locations in the building).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.OccupancyGenerator.get_path">
+<code class="descname">get_path</code><span class="sig-paren">(</span><em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#OccupancyGenerator.get_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.OccupancyGenerator.get_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use BFS to find the shortest path between two zones.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> – The entry of the start zone.</li>
+<li><strong>end</strong> – The entry of the target zone.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of zone names that the occupant need to cross.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="occupancy_generator.Person">
+<em class="property">class </em><code class="descclassname">occupancy_generator.</code><code class="descname">Person</code><span class="sig-paren">(</span><em>generator</em>, <em>office=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#object" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class contains the detail location of a single occupant.</p>
+<dl class="method">
+<dt id="occupancy_generator.Person.check_in_office">
+<code class="descname">check_in_office</code><span class="sig-paren">(</span><em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.check_in_office"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.check_in_office" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the occupant is in his/her office or not during a given period of time.
+:param start: The start time.
+:param end: The end time.
+:return: Return True if the occupant is in his/her office between given time, and False otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.customer_come">
+<code class="descname">customer_come</code><span class="sig-paren">(</span><em>start_time</em>, <em>end_time</em>, <em>dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.customer_come"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.customer_come" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate the event of customers coming for the current occupant.
+:param start_time: The scheduled appointment start time (not the real start time).
+:param end_time: The scheduled appointment end time (not the real end time).
+:param dest: The appointment location (zone entry).
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.decide_come">
+<code class="descname">decide_come</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.decide_come"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.decide_come" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each person need to decide if he/she will come to work today, when exactly they come, and when exactly
+they leave. Each person target to come at 8:30 am and leave at 5 pm, with a exponential distribution where
+mu = 30 minute. Use exponential distribution because people tend to come/leave on time with a very small
+chance of being late. In the meantime, assume that people directly goes into their own office right away.
+They require some time to walk to their office.
+:return: True if come to work, False otherwise</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.generate_daily_meeting">
+<code class="descname">generate_daily_meeting</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_daily_meeting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_daily_meeting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the time that current occupant go to the daily meeting.
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.generate_daily_route">
+<code class="descname">generate_daily_route</code><span class="sig-paren">(</span><em>customer_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_daily_route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_daily_route" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the whole day locations for the occupant.
+:param customer_list: List of Person that will visit the occupant today.
+:return: List of appointment times.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.generate_go_other_office">
+<code class="descname">generate_go_other_office</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_go_other_office"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_go_other_office" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the event of visiting colleagues’ office for random talk. Only possible if the colleague is in the office.
+:return: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.generate_lunch">
+<code class="descname">generate_lunch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.generate_lunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.generate_lunch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the time that current occupant go to the cafeteria and take the lunch.
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.get_in_office_range">
+<code class="descname">get_in_office_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.get_in_office_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.get_in_office_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all times that the occupant is in his/her office.
+:return: list of timeslots that the occupant is in the office</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.get_position">
+<code class="descname">get_position</code><span class="sig-paren">(</span><em>sec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.get_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.get_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the location of the occupant at the given time
+:param sec: The time that need to check.
+:return: The zone entry of the location at the given time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.get_trigger">
+<code class="descname">get_trigger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.get_trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.get_trigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="occupancy_generator.Person.handle_customer">
+<code class="descname">handle_customer</code><span class="sig-paren">(</span><em>num_customer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#Person.handle_customer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.Person.handle_customer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up an appointment for occupant with some new customers.
+:param num_customer: Number of customers in total today will come.
+:return: tuple of (appointment start time, appointment end time, appointment location).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="occupancy_generator.get_white_bias">
+<code class="descclassname">occupancy_generator.</code><code class="descname">get_white_bias</code><span class="sig-paren">(</span><em>second</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#get_white_bias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.get_white_bias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a bias.
+:param second: Value range.
+:return: Bias.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="occupancy_generator.main">
+<code class="descclassname">occupancy_generator.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/occupancy_generator.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#occupancy_generator.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-eventqueue">
+<span id="eventqueue-module"></span><h2>eventqueue module<a class="headerlink" href="#module-eventqueue" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="eventqueue.EventQueue">
+<em class="property">class </em><code class="descclassname">eventqueue.</code><code class="descname">EventQueue</code><a class="reference internal" href="_modules/eventqueue.html#EventQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eventqueue.EventQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#object" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="eventqueue.EventQueue.add_extra_events">
+<code class="descname">add_extra_events</code><span class="sig-paren">(</span><em>value_name: str</em>, <em>priority: int</em>, <em>value</em>, <em>start_time: int</em>, <em>end_time: int = None</em>, <em>note: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eventqueue.html#EventQueue.add_extra_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eventqueue.EventQueue.add_extra_events" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eventqueue.EventQueue.get_event">
+<code class="descname">get_event</code><span class="sig-paren">(</span><em>time: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eventqueue.html#EventQueue.get_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eventqueue.EventQueue.get_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eventqueue.EventQueue.schedule_event">
+<code class="descname">schedule_event</code><span class="sig-paren">(</span><em>value</em>, <em>start_time: int</em>, <em>priority: int</em>, <em>type: str = 'actuator'</em>, <em>dict_target: dict = None</em>, <em>component_type: str = None</em>, <em>control_type: str = None</em>, <em>actuator_key: str = None</em>, <em>var_name: str = None</em>, <em>end_time: int = None</em>, <em>note: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eventqueue.html#EventQueue.schedule_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eventqueue.EventQueue.schedule_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eventqueue.EventQueue.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><em>current_time: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eventqueue.html#EventQueue.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eventqueue.EventQueue.trigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="installing.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Sustainable Computing Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+*****************
+API documentation
+*****************
+
+
+.. toctree::
+   :maxdepth: 4
+
+model module
+============================
+
+.. automodule:: model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+occupancy_generator module
+============================
+
+.. automodule:: occupancy_generator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+eventqueue module
+============================
+
+.. automodule:: eventqueue
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>model &mdash; COBS Early Acccess 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> COBS
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">COBS Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Readme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Credits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">COBS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for model</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">eventqueue</span> <span class="k">import</span> <span class="n">EventQueue</span>
+<span class="kn">from</span> <span class="nn">eppy.modeleditor</span> <span class="k">import</span> <span class="n">IDF</span>
+<span class="kn">from</span> <span class="nn">eppy.bunch_subclass</span> <span class="k">import</span> <span class="n">BadEPFieldError</span>
+<span class="c1"># from pyenergyplus.api import EnergyPlusAPI</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Pipe</span><span class="p">,</span> <span class="n">Process</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../modules.html#model.Agent">[docs]</a><span class="k">class</span> <span class="nc">Agent</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dummy agent as a placeholder. No meaning</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../modules.html#model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The environment class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model_import_flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Model.set_energyplus_folder"><a class="viewcode-back" href="../modules.html#model.Model.set_energyplus_folder">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_energyplus_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add the pyenergyplus into the path so the program can find the EnergyPlus.</span>
+<span class="sd">        :param path: The installation path of the EnergyPlus 9.3.0.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">IDF</span><span class="o">.</span><span class="n">setiddname</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{path}</span><span class="s2">Energy+.idd&quot;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">model_import_flag</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">idf_file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">prototype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">climate_zone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">weather_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">heating_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">foundation_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span> <span class="o">=</span> <span class="kc">None</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the building by loading the IDF file to the model.</span>
+<span class="sd">        :param idf_file_name: The relative path to the IDF file. Use it if you want to use your own model.</span>
+<span class="sd">        :param prototype: Either &quot;multi&quot; and &quot;single&quot;, indicates the Multi-family low-rise apartment building and Single-family detached house.</span>
+<span class="sd">        :param climate_zone: The climate zone code of the building. Please refer to https://codes.iccsafe.org/content/iecc2018/chapter-3-ce-general-requirements.</span>
+<span class="sd">        :param weather_file: The relative path to the weather file associate with the building.</span>
+<span class="sd">        :param heating_type: Select one from &quot;electric&quot;, &quot;gas&quot;, &quot;oil&quot;, and &quot;pump&quot;</span>
+<span class="sd">        :param foundation_type: Select one from &quot;crawspace&quot;, &quot;heated&quot;, &quot;slab&quot;, and &quot;unheated&quot;</span>
+<span class="sd">        :param agent: The user-defined Agent class object if the agent is implemented in a class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Model</span><span class="o">.</span><span class="n">model_import_flag</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You have to set the energyplus folder first&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_parameters</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">EventQueue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent</span> <span class="o">=</span> <span class="n">agent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zone_names</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thermal_names</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">historical_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warmup_complete</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_step</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_energy</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">duplex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_lock</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># TODO: Validate input parameters</span>
+
+        <span class="k">if</span> <span class="n">idf_file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">idf_file_name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;./buildings/</span><span class="si">{prototype}</span><span class="s2">_</span><span class="si">{climate_zone}</span><span class="s2">_</span><span class="si">{heating_type}</span><span class="s2">_</span><span class="si">{foundation_type}</span><span class="s2">.idf&quot;</span>
+            <span class="k">if</span> <span class="n">weather_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">weather_file</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;./weathers/</span><span class="si">{climate_zone}</span><span class="s2">.epw&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;result&quot;</span><span class="p">,</span> <span class="s2">&quot;input.idf&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">weather_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-w&quot;</span><span class="p">,</span> <span class="n">weather_file</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_parameters</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="n">IDF</span><span class="p">(</span><span class="n">idf_file_name</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;IDF file is damaged or not match with your EnergyPlus version.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Model.name_reformat"><a class="viewcode-back" href="../modules.html#model.Model.name_reformat">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">name_reformat</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert the entry from the space separated entry to the underline separated entry to match the IDF.</span>
+<span class="sd">        :param name: The space separated entry.</span>
+<span class="sd">        :return: The underline separated entry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">name</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Model.list_all_available_configurations"><a class="viewcode-back" href="../modules.html#model.Model.list_all_available_configurations">[docs]</a>    <span class="k">def</span> <span class="nf">list_all_available_configurations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a list of all type of components appeared in the current building.</span>
+<span class="sd">        :return: list of components entry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Model.get_all_configurations"><a class="viewcode-back" href="../modules.html#model.Model.get_all_configurations">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_configurations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the IDF file, and return the content formatted with the IDD file.</span>
+<span class="sd">        :return: the full IDF file with names and comments aside.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span></div>
+
+<div class="viewcode-block" id="Model.get_sub_configuration"><a class="viewcode-back" href="../modules.html#model.Model.get_sub_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">get_sub_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                              <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show all available settings for the given type of component.</span>
+<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        :return: List of settings entry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;No </span><span class="si">{idf_header_name}</span><span class="s2"> section in current IDF file&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fieldnames</span></div>
+
+<div class="viewcode-block" id="Model.get_available_names_under_group"><a class="viewcode-back" href="../modules.html#model.Model.get_available_names_under_group">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_names_under_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                        <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the type of components, find all available components in the building by their entry.</span>
+<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        :return: List of names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">available_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub_configuration</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Name&quot;</span> <span class="ow">in</span> <span class="n">available_names</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">available_names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">field_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">]]</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;No entry field available for </span><span class="si">{idf_header_name}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.get_configuration"><a class="viewcode-back" href="../modules.html#model.Model.get_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">get_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                          <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                          <span class="n">component_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the type of component, the entry of the target component, find the settings of that component.</span>
+<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        :param component_name: The entry of the component.</span>
+<span class="sd">        :return: Settings of this component.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component_name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">][</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">component_name</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failed to locate </span><span class="si">{component_name}</span><span class="s2"> in </span><span class="si">{idf_header_name}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.get_value_range"><a class="viewcode-back" href="../modules.html#model.Model.get_value_range">[docs]</a>    <span class="k">def</span> <span class="nf">get_value_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the range of acceptable values of the specific setting.</span>
+<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        :param field_name: The setting entry.</span>
+<span class="sd">        :param validate: Set to True to check the current value is valid or not.</span>
+<span class="sd">        :return: Validation result or the range of all acceptable values retrieved from the IDD file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub_configuration</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failed to locate </span><span class="si">{field_name}</span><span class="s2"> in </span><span class="si">{idf_header_name}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">checkrange</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getrange</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.add_configuration"><a class="viewcode-back" href="../modules.html#model.Model.add_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">add_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                          <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                          <span class="n">values</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create and add a new component into the building model with the specific type and setting values.</span>
+<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        :param values: A dictionary map the setting entry and the setting value.</span>
+<span class="sd">        :return: The new component.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">newidfobject</span><span class="p">(</span><span class="n">idf_header_name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">object</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">Model</span><span class="o">.</span><span class="n">name_reformat</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                <span class="n">exec</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;object.</span><span class="si">{key}</span><span class="s2"> = </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">exec</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;object.</span><span class="si">{key}</span><span class="s2"> = &#39;</span><span class="si">{value}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">object</span></div>
+
+<div class="viewcode-block" id="Model.delete_configuration"><a class="viewcode-back" href="../modules.html#model.Model.delete_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">delete_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                             <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">component_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete an existing component from the building model.</span>
+<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        :param component_name: The entry of the component.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;No </span><span class="si">{idf_header_name}</span><span class="s2"> section in current IDF file&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">component_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">popidfobject</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component_name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">popidfobject</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">,</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">component_name</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Failed to locate </span><span class="si">{component_name}</span><span class="s2"> in </span><span class="si">{idf_header_name}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.edit_configuration"><a class="viewcode-back" href="../modules.html#model.Model.edit_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">edit_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                           <span class="n">idf_header_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                           <span class="n">identifier</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                           <span class="n">update_values</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Edit an existing component in the building model.</span>
+<span class="sd">        :param idf_header_name: The type of the component.</span>
+<span class="sd">        :param identifier: A dictionary map the setting entry and the setting value to locate the target component.</span>
+<span class="sd">        :param update_values: A dictionary map the setting entry and the setting value that needs to update.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;No </span><span class="si">{idf_header_name}</span><span class="s2"> section in current IDF file&quot;</span><span class="p">)</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub_configuration</span><span class="p">(</span><span class="n">idf_header_name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">idfobjects</span><span class="p">[</span><span class="n">idf_header_name</span><span class="p">]:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">identifier</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">Model</span><span class="o">.</span><span class="n">name_reformat</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+                        <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">valid</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">update_values</span><span class="p">:</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">Model</span><span class="o">.</span><span class="n">name_reformat</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                        <span class="n">exec</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;entry.</span><span class="si">{key}</span><span class="s2"> = </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">exec</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;entry.</span><span class="si">{key}</span><span class="s2"> = &#39;</span><span class="si">{value}</span><span class="s2">&#39;&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_thermal_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize all available thermal zones.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">people_zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="s2">&quot;People&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thermal_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">zone</span> <span class="ow">in</span> <span class="n">people_zones</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">zone</span><span class="p">[</span><span class="n">Model</span><span class="o">.</span><span class="n">name_reformat</span><span class="p">(</span><span class="s2">&quot;Thermal Comfort Model 1 Type&quot;</span><span class="p">)]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">thermal_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zone</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="n">BadEPFieldError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+<div class="viewcode-block" id="Model.save_idf_file"><a class="viewcode-back" href="../modules.html#model.Model.save_idf_file">[docs]</a>    <span class="k">def</span> <span class="nf">save_idf_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the modified building model for EnergyPlus simulation</span>
+<span class="sd">        :param path: The relative path to the modified IDF file.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">saveas</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_initialization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the EnergyPlus simulation by letting the EnergyPlus finish the warmup.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">api_data_fully_ready</span><span class="p">():</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warmup_complete</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_generate_output_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert errors to terminate the simulation after the warmup in order to generate the EDD file to list all available actions for the current building.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_step_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the state value at each timestep, and modify the building model based on the actions from the `EventQueue&#39;.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">api_data_fully_ready</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warmup_complete</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">current_state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="c1"># print(&quot;Child: Simulating&quot;)</span>
+        <span class="n">current_state</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">current_state</span><span class="p">[</span><span class="s2">&quot;occupancy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_names</span><span class="p">:</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_variable_handle</span><span class="p">(</span><span class="s2">&quot;Zone Air Temperature&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">current_state</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_variable_value</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_meter_handle</span><span class="p">(</span><span class="s2">&quot;Heating:EnergyTransfer&quot;</span><span class="p">)</span>
+        <span class="n">current_state</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_meter_value</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Zone Thermal Comfort Fanger Model PMV&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="s2">&quot;Output:Variable&quot;</span><span class="p">):</span>
+            <span class="n">current_state</span><span class="p">[</span><span class="s2">&quot;PMV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">zone</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">thermal_names</span><span class="p">:</span>
+                <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_variable_handle</span><span class="p">(</span><span class="s2">&quot;Zone Thermal Comfort Fanger Model PMV&quot;</span><span class="p">,</span> <span class="n">zone</span><span class="p">)</span>
+                <span class="n">current_state</span><span class="p">[</span><span class="s2">&quot;PMV&quot;</span><span class="p">][</span><span class="n">zone</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_variable_value</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_lock</span><span class="p">:</span>
+            <span class="c1"># print(&quot;Child: Sending current states&quot;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">child_energy</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">current_state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+            <span class="c1"># Take all actions</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_step</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="c1"># print(&quot;Child: Waiting for actions&quot;)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_energy</span><span class="o">.</span><span class="n">poll</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_step</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="c1"># print(&quot;Child: Receiving actions&quot;)</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_energy</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_state</span> <span class="o">=</span> <span class="n">current_state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">historical_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_state</span><span class="p">)</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># print(&quot;Child: executing actions&quot;)</span>
+
+        <span class="c1"># Trigger events</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;actuator&quot;</span><span class="p">]:</span>
+            <span class="n">component_type</span><span class="p">,</span> <span class="n">control_type</span><span class="p">,</span> <span class="n">actuator_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|*|&quot;</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;actuator&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_actuator_handle</span><span class="p">(</span><span class="n">component_type</span><span class="p">,</span> <span class="n">control_type</span><span class="p">,</span> <span class="n">actuator_key</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">set_actuator_value</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;global&quot;</span><span class="p">]:</span>
+            <span class="n">var_name</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;global&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">get_global_handle</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">exchange</span><span class="o">.</span><span class="n">set_global_value</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># if self.use_lock:</span>
+        <span class="c1">#     # wait for next call of step</span>
+        <span class="c1">#     self.wait_for_step.clear()</span>
+        <span class="c1">#     self.wait_for_step.wait()</span>
+        <span class="c1"># else:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_lock</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Model.step"><a class="viewcode-back" href="../modules.html#model.Model.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add all actions into the `EventQueue&#39;, and then generate the state value of the next timestep.</span>
+<span class="sd">        :param action_list: list of dictionarys contains the arguments for `EventQueue.schedule_event()&#39;.</span>
+<span class="sd">        :return: The state value of the current timestep.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">action_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">action_list</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">schedule_event</span><span class="p">(</span><span class="o">**</span><span class="n">action</span><span class="p">)</span>
+        <span class="c1"># print(&quot;Parent: Sending actions&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Let process grab and execute actions</span>
+        <span class="c1"># print(&quot;Parent: Releasing child&#39;s lock&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_step</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="c1"># print(&quot;Parent: Waiting for state values&quot;)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">poll</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">current_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">current_state</span> <span class="o">!=</span> <span class="s2">&quot;Terminated&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_state</span> <span class="o">=</span> <span class="n">current_state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">historical_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="c1"># print(&quot;Parent: received state values&quot;)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_state</span></div>
+
+<div class="viewcode-block" id="Model.is_terminate"><a class="viewcode-back" href="../modules.html#model.Model.is_terminate">[docs]</a>    <span class="k">def</span> <span class="nf">is_terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the simulation is finished or not.</span>
+<span class="sd">        :return: True if the simulation is done, and False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span></div>
+
+<div class="viewcode-block" id="Model.reset"><a class="viewcode-back" href="../modules.html#model.Model.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear the actions and buffer, reset the environment and start the simulation.</span>
+<span class="sd">        :return: The initial state of the simulation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_simulation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">EventQueue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">historical_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_step</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_lock</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_energy</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">duplex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">historical_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_state</span></div>
+
+<div class="viewcode-block" id="Model.simulate"><a class="viewcode-back" href="../modules.html#model.Model.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terminate_after_warmup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the whole simulation once. If user use this method instead of the reset function, the user need to provide the Agent.</span>
+<span class="sd">        :param terminate_after_warmup: True if the simulation should terminate after the warmup.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">pyenergyplus.api</span> <span class="k">import</span> <span class="n">EnergyPlusAPI</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_simulation</span><span class="p">()</span>
+        <span class="c1"># for entry in self.zone_names:</span>
+        <span class="c1">#     print(entry)</span>
+        <span class="c1">#     self.current_handle[&quot;temperature&quot;][entry] = \</span>
+        <span class="c1">#         self.api.exchange.get_variable_handle(&quot;Zone Air Temperature&quot;, entry)</span>
+        <span class="c1"># self.current_handle[&quot;temperature&quot;] = self.api.exchange.get_variable_handle(&quot;SITE OUTDOOR AIR DRYBULB TEMPERATURE&quot;, &quot;ENVIRONMENT&quot;)</span>
+        <span class="c1"># self.current_handle[&quot;energy&quot;] = self.api.exchange.get_meter_handle(&quot;Electricity:Facility&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">EnergyPlusAPI</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">terminate_after_warmup</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">callback_after_new_environment_warmup_complete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_initialization</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">callback_begin_system_timestep_before_predictor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_step_callback</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">callback_begin_new_environment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_output_files</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">run_energyplus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_parameters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">child_energy</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Terminated&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_state</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_init_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the modified building model and initialize the zones for states.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="o">.</span><span class="n">saveas</span><span class="p">(</span><span class="s2">&quot;input.idf&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_lock</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zone_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="s2">&quot;Zone&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_thermal_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warmup_complete</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Model.get_current_state_values"><a class="viewcode-back" href="../modules.html#model.Model.get_current_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find the current entries in the state.</span>
+<span class="sd">        :return: List of entry names that is currently available in the state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">state_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_possible_state_entries</span><span class="p">())</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="p">)</span>
+        <span class="n">state_values</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">state_values</span></div>
+
+<div class="viewcode-block" id="Model.select_state_values"><a class="viewcode-back" href="../modules.html#model.Model.select_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">select_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select interested state entries. If selected entry is not available for the current building, it will be ignored.</span>
+<span class="sd">        :param entry: Entry names that the state of the environment should have.</span>
+<span class="sd">        :param index: Index of all available entries that the state of the environment should have.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_state_values</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_state</span><span class="p">):</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_state</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_possible_state_entries</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.add_state_values"><a class="viewcode-back" href="../modules.html#model.Model.add_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">add_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add entries to the state. If selected entry is not available for the current building, it will be ignored.</span>
+<span class="sd">        :param entry: Entry names that the state of the environment should have.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span> <span class="o">-=</span> <span class="nb">set</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.remove_state_values"><a class="viewcode-back" href="../modules.html#model.Model.remove_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">remove_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove entries from the state. If selected entry is not available in the state, it will be ignored.</span>
+<span class="sd">        :param entry: Entry names that the state of the environment should not have.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">entry</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Model.pop_state_values"><a class="viewcode-back" href="../modules.html#model.Model.pop_state_values">[docs]</a>    <span class="k">def</span> <span class="nf">pop_state_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove entries from the state by its index. If selected index is not available in the state, it will be ignored.</span>
+<span class="sd">        :param index: Entry index that the state of the environment should not have.</span>
+<span class="sd">        :return: All entry names that is removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_state_values</span><span class="p">()</span>
+        <span class="n">pop_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_state</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">current_state</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">pop_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_state</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">pop_values</span></div>
+
+<div class="viewcode-block" id="Model.get_possible_state_entries"><a class="viewcode-back" href="../modules.html#model.Model.get_possible_state_entries">[docs]</a>    <span class="k">def</span> <span class="nf">get_possible_state_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all available state entries. This list of entries only depends on the building architecture.</span>
+<span class="sd">        :return: List of available state entry names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_names_under_group</span><span class="p">(</span><span class="s2">&quot;Output:Variable&quot;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+<div class="viewcode-block" id="Model.get_possible_actions"><a class="viewcode-back" href="../modules.html#model.Model.get_possible_actions">[docs]</a>    <span class="k">def</span> <span class="nf">get_possible_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all available actions that the user-defined agent can take. This list of actions only depends on the building architecture.</span>
+<span class="sd">        :return: List of available actions in dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;./result/eplusout.edd&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="s2">&quot;Output:EnergyManagementSystem&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="s2">&quot;Output:EnergyManagementSystem&quot;</span><span class="p">,</span>
+                                       <span class="n">values</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Actuator Availability Dictionary Reporting&quot;</span><span class="p">:</span> <span class="s2">&quot;Verbose&quot;</span><span class="p">,</span>
+                                               <span class="s2">&quot;Internal Variable Availability Dictionary Reporting&quot;</span><span class="p">:</span> <span class="s2">&quot;Verbose&quot;</span><span class="p">,</span>
+                                               <span class="s2">&quot;EMS Runtime Language Debug Output Level&quot;</span><span class="p">:</span> <span class="s2">&quot;ErrorsOnly&quot;</span><span class="p">})</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">terminate_after_warmup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="n">actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./result/eplusout.edd&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edd</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">edd</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;!&#39;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;Component Type&quot;</span><span class="p">:</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                <span class="s2">&quot;Control Type&quot;</span><span class="p">:</span> <span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                                <span class="s2">&quot;Actuator Key&quot;</span><span class="p">:</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="n">actions</span></div>
+
+<div class="viewcode-block" id="Model.get_link_zones"><a class="viewcode-back" href="../modules.html#model.Model.get_link_zones">[docs]</a>    <span class="k">def</span> <span class="nf">get_link_zones</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a graph that shows the connectivity of zones of the current building.</span>
+<span class="sd">        :return: A bi-directional graph represented by a dictionary where the key is the source zone name and the value is a set of all neighbor zone name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">link_zones</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Outdoor&quot;</span><span class="p">:</span> <span class="nb">set</span><span class="p">()}</span>
+
+        <span class="n">wall_to_zone</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">walls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="s2">&quot;BuildingSurface:Detailed&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">walls</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">wall</span><span class="o">.</span><span class="n">Surface_Type</span> <span class="o">!=</span> <span class="s2">&quot;WALL&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">wall_to_zone</span><span class="p">[</span><span class="n">wall</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="n">wall</span><span class="o">.</span><span class="n">Zone_Name</span>
+            <span class="n">link_zones</span><span class="p">[</span><span class="n">wall</span><span class="o">.</span><span class="n">Zone_Name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">walls</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">wall</span><span class="o">.</span><span class="n">Surface_Type</span> <span class="o">!=</span> <span class="s2">&quot;WALL&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">wall</span><span class="o">.</span><span class="n">Outside_Boundary_Condition</span> <span class="o">==</span> <span class="s2">&quot;Outdoors&quot;</span><span class="p">:</span>
+                <span class="n">link_zones</span><span class="p">[</span><span class="n">wall</span><span class="o">.</span><span class="n">Zone_Name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;Outdoor&quot;</span><span class="p">)</span>
+                <span class="n">link_zones</span><span class="p">[</span><span class="s2">&quot;Outdoor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">Zone_Name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">wall</span><span class="o">.</span><span class="n">Outside_Boundary_Condition_Object</span><span class="p">:</span>
+                <span class="n">link_zones</span><span class="p">[</span><span class="n">wall_to_zone</span><span class="p">[</span><span class="n">wall</span><span class="o">.</span><span class="n">Outside_Boundary_Condition_Object</span><span class="p">]]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">Zone_Name</span><span class="p">)</span>
+                <span class="n">link_zones</span><span class="p">[</span><span class="n">wall</span><span class="o">.</span><span class="n">Zone_Name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">wall_to_zone</span><span class="p">[</span><span class="n">wall</span><span class="o">.</span><span class="n">Outside_Boundary_Condition_Object</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">link_zones</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Sustainable Computing Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
