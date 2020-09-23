@@ -432,10 +432,8 @@
 <div class="viewcode-block" id="Person.decide_come"><a class="viewcode-back" href="../modules.html#occupancy_generator.Person.decide_come">[docs]</a>    <span class="k">def</span> <span class="nf">decide_come</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Each person need to decide if he/she will come to work today, when exactly they come, and when exactly</span>
-<span class="sd">        they leave. Each person target to come at 8:30 am and leave at 5 pm, with a exponential distribution where</span>
-<span class="sd">        mu = 30 minute. Use exponential distribution because people tend to come/leave on time with a very small</span>
-<span class="sd">        chance of being late. In the meantime, assume that people directly goes into their own office right away.</span>
-<span class="sd">        They require some time to walk to their office.</span>
+<span class="sd">        they leave. We assume people start to come at 8:30 am and leave at 5 pm, with a poisson arrival lambda = 30 min.</span>
+<span class="sd">        Notice that we simulate this as poisson arrival, which means two arrivals are not independent. </span>
 <span class="sd">        </span>
 <span class="sd">        :return: True if come to work, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
