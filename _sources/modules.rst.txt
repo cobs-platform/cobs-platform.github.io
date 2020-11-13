@@ -6,26 +6,34 @@ API documentation
 .. toctree::
    :maxdepth: 4
 
-model module
+Model class
 ============================
 
-.. automodule:: model
+.. automodule:: cobs.model
     :members:
     :undoc-members:
     :show-inheritance:
 
-occupancy_generator module
+ReplayBuffer class
 ============================
 
-.. automodule:: occupancy_generator
+.. automodule:: cobs.replay_buffer
     :members:
     :undoc-members:
     :show-inheritance:
 
-eventqueue module
+OccupancyGenerator Class
 ============================
 
-.. automodule:: eventqueue
+.. automodule:: cobs.occupancy_generator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+EventQueue class
+============================
+
+.. automodule:: cobs.event_queue
     :members:
     :undoc-members:
     :show-inheritance:
